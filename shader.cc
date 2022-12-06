@@ -189,20 +189,19 @@ void shader_core_ctx::create_schedulers() {
   const concrete_scheduler scheduler =
       sched_config.find("lrr") != std::string::npos
           ? CONCRETE_SCHEDULER_LRR
-          : sched_config.find("two_level_active") != std::string::npos
-                ? CONCRETE_SCHEDULER_TWO_LEVEL_ACTIVE
+     	        : sched_config.find("two_level_active") != std::string::npos
+                	    ? CONCRETE_SCHEDULER_TWO_LEVEL_ACTIVE
                 : sched_config.find("gto") != std::string::npos
                       	    ? CONCRETE_SCHEDULER_GTO
-		      : sched_config.find("laws") != std::string::npos
+	        : sched_config.find("laws") != std::string::npos
 		      	    ? CONCRETE_SCHEDULER_LAWS
-                      : sched_config.find("rrr") != std::string::npos
+                : sched_config.find("rrr") != std::string::npos
                             ? CONCRETE_SCHEDULER_RRR
-                      : sched_config.find("old") != std::string::npos
+                : sched_config.find("old") != std::string::npos
                             ? CONCRETE_SCHEDULER_OLDEST_FIRST
-                            : sched_config.find("warp_limiting") !=
-                                      std::string::npos
-                                  ? CONCRETE_SCHEDULER_WARP_LIMITING
-                                  : NUM_CONCRETE_SCHEDULERS;
+                : sched_config.find("warp_limiting") != std::string::npos
+                            ? CONCRETE_SCHEDULER_WARP_LIMITING
+                : NUM_CONCRETE_SCHEDULERS;
   assert(scheduler != NUM_CONCRETE_SCHEDULERS);
 
   for (unsigned i = 0; i < m_config->gpgpu_num_sched_per_core; i++) {
@@ -2053,11 +2052,11 @@ void ldst_unit::L1_latency_queue_cycle() {
                         m_core->get_gpu()->gpu_sim_cycle +
                             m_core->get_gpu()->gpu_tot_sim_cycle,
                         events);
-      if(mf_next->vector_laws.size() < 100) {
-      	mf_next->vector_laws.push_back(mf_next->get_addr());
+      if(m_core->vector_laws.size() < 100) {
+      	m_core->vector_laws.push_back(mf_next->get_addr());
       } else {
-      	mf_next->vector_laws.pop_front();
-	mf_next->vector_laws.push_back(mf_next->get_addr());
+      	m_core->vector_laws.pop_back();
+	m_core->vector_laws.push_back(mf_next->get_addr());
       }
       bool write_sent = was_write_sent(events);
       bool read_sent = was_read_sent(events);

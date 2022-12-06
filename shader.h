@@ -400,6 +400,7 @@ class scheduler_unit {  // this can be copied freely, so can be used in std
       unsigned num_warps_to_add, OrderingType age_ordering,
       bool (*priority_func)(U lhs, U rhs));
   static bool sort_warps_by_oldest_dynamic_id(shd_warp_t *lhs, shd_warp_t *rhs);
+  static bool sort_warps_by_laws_id(shd_warp_t *lhs, shd_warp_t *rhs);
 
   // Derived classes can override this function to populate
   // m_supervised_warps with their scheduling policies
@@ -2050,7 +2051,7 @@ class shader_core_ctx : public core_t {
                   const shader_core_config *config,
                   const memory_config *mem_config, shader_core_stats *stats);
 
-  std::vector<shd_warp_t *> vector_laws;
+  std::vector<new_addr_type> vector_laws;
   // used by simt_core_cluster:
   // modifiers
   void cycle();
